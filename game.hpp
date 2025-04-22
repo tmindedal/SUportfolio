@@ -5,13 +5,21 @@
 
 
 class character {
+    
     protected:
+        std::string name;    
         int hp;
         int strength;
-        std::string name;
     
     public:
-        character() : 
+        Character()(std::string name, int health, int strength);
+        virtual ~Character() = default;
+
+        std::string getName() const;
+        int getHealth() const;
+        int getStrength() const;
+        void damage(int amount);
+        bool isAlive() const;
 };
 
 
