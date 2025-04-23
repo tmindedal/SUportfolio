@@ -29,7 +29,7 @@ class Hero : public Character {
     private:
         int level;
         int xp;
-        int xpToLevelUp;
+        int maxHp; // To reset HP after every fight
     
     public:
         Hero(std::string name, int health = 10, int strength = 2, int xp = 0,  int level = 1);
@@ -39,6 +39,7 @@ class Hero : public Character {
         
         void gainXp(int amount);
         void levelUp();
+        void resetHp(); // Reset HP to max after every fight
 
 };
 

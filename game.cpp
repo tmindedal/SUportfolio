@@ -30,6 +30,7 @@ Hero::Hero(std::string name, int health, int strength, int xp, int level) : Char
     this->strength = strength;
     this->level = level;
     this->xp = xp;
+    this->maxHp = health; // Set max HP so we can reset the HP after every fight
 }
 
 // Defining the functions of the Hero class.
@@ -43,13 +44,17 @@ void Hero::levelUp() {
     if (xp >= level * 1000) {
         level++;
         strength++;
-        hp += 2;
+        maxHp += 2;
         xp -= level * 1000; // Reset XP after leveling up
         std::cout << name << " leveled up to level " << level << "\n";
         std::cout << "New strength: " << strength << "\n";
         std::cout << "New health: " << hp << "\n";
     }
 }
+
+void Hero::resetHp() { 
+    this->hp = maxHp; // Reset HP to max after every fight
+} 
 
 Monster::Monster(std::string name, int health, int strength, int xpReward) : Character(name, health, strength) {
     this->name = name;
@@ -86,37 +91,38 @@ void combat(Hero &hero, Monster &monster) {
 
 std::vector<Monster> getMonsters() {
     return {
-        Monster("Hest", 4, 1, 100),
+        Monster("Horse", 4, 1, 100),
         Monster("Weak Goblin", 4, 2, 200),
         Monster("Strong Goblin", 8, 3, 400),
         Monster("Stronger Goblin", 10, 4, 500),
-        Monster("Den stærkeste Goblin", 15, 5, 800),
-        Monster("Abe Kongen", 30, 5, 1000),
-        Monster("Enhjørning", 5, 8, 1500),
-        Monster("Drage", 100, 10, 3000)
+        Monster("The Strongest Goblin", 15, 5, 800),
+        Monster("The Monkey King", 30, 5, 1000),
+        Monster("The Unicorn", 5, 8, 1500),
+        Monster("The Dragon", 100, 10, 3000)
     };
 }
 
 void gameLoop(Hero& hero) {
     while (true) {
-        std::cout << "Press 1 to exit or any other key to continue the adventure: ";
+        std::cout << "Press 1 to exit or any other key to continue: ";
         int choice;
         std::cin >> choice;
 
         if (choice == 1) break;
         else {
             std::cout << "You continue your adventure!" << "\n";
-            std::cout << "Choose your opponent: " << "\n";
             std::vector<Monster> monsters = getMonsters();
             for (int i = 0; i < monsters.size(); i++) {
-                std::cout << i + 1 << ". " << monsters[i].getName() << monsters[i].getHealth() << " health, " 
+                std::cout << i + 1 << ". " << monsters[i].getName() << ", " << monsters[i].getHealth() << " health, " 
                 << monsters[i].getStrength() << " strength, " << "\n";
             }
+            std::cout << "Choose your opponent: " << "\n";
             int monsterChoice;
             std::cin >> monsterChoice;
             if (monsterChoice > 0 && monsterChoice <= monsters.size()) {
                 std::cout << "You chose " << monsters[monsterChoice - 1].getName() << "!" << "\n";
                 combat(hero, monsters[monsterChoice - 1]);
+                hero.resetHp(); // Reset HP after every fight
             }
         }
     }
