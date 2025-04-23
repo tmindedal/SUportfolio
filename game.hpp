@@ -42,6 +42,17 @@ class Hero : public Character {
 
 };
 
+class Monster : public Character {
+    
+    private:
+        int xpReward;
+
+    public: 
+        Monster(std::string name, int health, int strength, int xp_reward);
+        
+        int getXpReward() const;  
+};
+
 
 
 #endif // GAME_HPP

@@ -12,25 +12,15 @@ Character::Character(std::string name, int health, int strength) {
 }
 
 // Defining the functions of the Character class.
-std::string Character::getName() const {
-    return name;
-}
+std::string Character::getName() const { return name; }
 
-int Character::getHealth() const {
-    return hp;
-}
+int Character::getHealth() const { return hp; }
 
-int Character::getStrength() const {
-    return strength;
-}
+int Character::getStrength() const { return strength; }
 
-void Character::damage(int amount) {
-    hp -= amount;
-}
+void Character::damage(int amount) { hp -= amount; }
 
-bool Character::isAlive() const {
-    return hp > 0;
-}
+bool Character::isAlive() const { return hp > 0; }
 
 
 // Implementation of the Hero class
@@ -43,17 +33,11 @@ Hero::Hero(std::string name, int health, int strength, int xp, int level) : Char
 }
 
 // Defining the functions of the Hero class.
-int Hero::getXp() const {
-    return xp;
-}
+int Hero::getXp() const { return xp; }
 
-int Hero::getLevel() const {
-    return level;
-}
+int Hero::getLevel() const { return level; }
 
-void Hero::gainXp(int amount) {
-    xp += amount;
-}
+void Hero::gainXp(int amount) { xp += amount; }
 
 void Hero::levelUp() {
     if (xp >= level * 1000) {
@@ -67,4 +51,11 @@ void Hero::levelUp() {
     }
 }
 
+Monster::Monster(std::string name, int health, int strength, int xpReward) : Character(name, health, strength) {
+    this->name = name;
+    this->hp = health;
+    this->strength = strength;
+    this->xpReward = xpReward;
+}
 
+int Monster::getXpReward() const { return xpReward; }
