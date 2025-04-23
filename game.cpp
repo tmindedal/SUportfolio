@@ -33,4 +33,38 @@ bool Character::isAlive() const {
 }
 
 
+// Implementation of the Hero class
+Hero::Hero(std::string name, int health, int strength, int xp, int level) : Character(name, health, strength) {
+    this->name = name;
+    this->hp = health;
+    this->strength = strength;
+    this->level = level;
+    this->xp = xp;
+}
+
+// Defining the functions of the Hero class.
+int Hero::getXp() const {
+    return xp;
+}
+
+int Hero::getLevel() const {
+    return level;
+}
+
+void Hero::gainXp(int amount) {
+    xp += amount;
+}
+
+void Hero::levelUp() {
+    if (xp >= level * 1000) {
+        level++;
+        strength += 1;
+        hp += 2;
+        xp -= level * 1000; // Reset XP after leveling up
+        std::cout << name << " leveled up to level " << level << "\n";
+        std::cout << "New strength: " << strength << "\n";
+        std::cout << "New health: " << hp << "\n";
+    }
+}
+
 

@@ -32,7 +32,7 @@ class Hero : public Character {
         int xpToLevelUp;
     
     public:
-        Hero(std::string name, int health, int strength, int level);
+        Hero(std::string name, int health = 10, int strength = 2, int xp = 0,  int level = 1);
         
         int getXp() const;
         int getLevel() const;
