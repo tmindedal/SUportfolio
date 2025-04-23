@@ -2,7 +2,7 @@
 #define GAME_HPP
 
 #include <string>
-
+#include <vector>
 
 class Character {
     
@@ -53,6 +53,10 @@ class Monster : public Character {
         int getXpReward() const;  
 };
 
+
+void combat(Hero &hero, Monster &monster);
+std::vector<Monster> getMonsters();
+void gameLoop(Hero& hero);
 
 
 #endif // GAME_HPP
