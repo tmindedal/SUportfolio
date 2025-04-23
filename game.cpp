@@ -48,7 +48,7 @@ void Hero::levelUp() {
         xp -= level * 1000; // Reset XP after leveling up
         std::cout << name << " leveled up to level " << level << "\n";
         std::cout << "New strength: " << strength << "\n";
-        std::cout << "New health: " << hp << "\n";
+        std::cout << "New health: " << maxHp << "\n\n";
     }
 }
 
@@ -67,7 +67,8 @@ int Monster::getXpReward() const { return xpReward; }
 
 
 void combat(Hero &hero, Monster &monster) {
-    std::cout << "The battle between " << hero.getName() << " and " << monster.getName() << " begins! " << "\n";
+    std::cout << "The battle between " << hero.getName() << " and " << monster.getName() << " begins! " << "\n\n";
+
     while (hero.isAlive() && monster.isAlive()) {
         std::cout << hero.getName() << " attacks " << monster.getName() << " and deals " << hero.getStrength() << " damage!" << "\n";
         monster.damage(hero.getStrength());
@@ -76,13 +77,15 @@ void combat(Hero &hero, Monster &monster) {
 
         std::cout << monster.getName() << " attacks " << hero.getName() << " and deals " << monster.getStrength() << " damage!" << "\n";
         hero.damage(monster.getStrength());
-        std::cout << hero.getName() << " has " << hero.getHealth() << " health left." << "\n";
+        std::cout << hero.getName() << " has " << hero.getHealth() << " health left." << "\n\n";
     }
 
     if (hero.isAlive()) {
-        std::cout << "You win the battle " << hero.getName() << "!" << "\n";
+        std::cout << "\n" << "You win the battle " << hero.getName() << "!" << "\n\n";
         hero.gainXp(monster.getXpReward());
         std::cout << hero.getName() << " gained " << monster.getXpReward() << " XP!" << "\n";
+        hero.levelUp(); // Check if the hero levels up after gaining XP
+
     } else {
         std::cout << "You lost the battle " << hero.getName() << "!" << "\n";
     }
@@ -116,7 +119,7 @@ void gameLoop(Hero& hero) {
                 std::cout << i + 1 << ". " << monsters[i].getName() << ", " << monsters[i].getHealth() << " health, " 
                 << monsters[i].getStrength() << " strength, " << "\n";
             }
-            std::cout << "Choose your opponent: " << "\n";
+            std::cout << "Choose your opponent: ";
             int monsterChoice;
             std::cin >> monsterChoice;
             if (monsterChoice > 0 && monsterChoice <= monsters.size()) {
