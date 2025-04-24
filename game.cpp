@@ -83,11 +83,11 @@ void combat(Hero &hero, Monster &monster) {
     if (hero.isAlive()) {
         std::cout << "\n" << "You win the battle " << hero.getName() << "!" << "\n\n";
         hero.gainXp(monster.getXpReward());
-        std::cout << hero.getName() << " gained " << monster.getXpReward() << " XP!" << "\n";
+        std::cout << hero.getName() << " gained " << monster.getXpReward() << " XP!" << "\n\n";
         hero.levelUp(); // Check if the hero levels up after gaining XP
 
     } else {
-        std::cout << "You lost the battle " << hero.getName() << "!" << "\n";
+        std::cout << "You lost the battle " << hero.getName() << "!" << "\n\n";
     }
 }
 
@@ -107,23 +107,24 @@ std::vector<Monster> getMonsters() {
 
 void gameLoop(Hero& hero) {
     while (true) {
-        std::cout << "Press 1 to exit or any other key to continue: ";
-        int choice;
+        std::cout << "Press 0 to exit or any other key to continue: \n";
+        char choice{};
         std::cin >> choice;
 
-        if (choice == 1) break;
+        if (choice == '0') break;
         else {
-            std::cout << "You continue your adventure!" << "\n";
+            std::cout << "You continue your adventure!" << "\n\n";
+            std::cout << "List of opponents: " << "\n";
             std::vector<Monster> monsters = getMonsters();
             for (int i = 0; i < monsters.size(); i++) {
                 std::cout << i + 1 << ". " << monsters[i].getName() << ", " << monsters[i].getHealth() << " health, " 
                 << monsters[i].getStrength() << " strength, " << "\n";
             }
-            std::cout << "Choose your opponent: ";
+            std::cout << "\nChoose your opponent: ";
             int monsterChoice;
             std::cin >> monsterChoice;
             if (monsterChoice > 0 && monsterChoice <= monsters.size()) {
-                std::cout << "You chose " << monsters[monsterChoice - 1].getName() << "!" << "\n";
+                std::cout << "\nYou chose " << monsters[monsterChoice - 1].getName() << "!" << "\n";
                 combat(hero, monsters[monsterChoice - 1]);
                 hero.resetHp(); // Reset HP after every fight
             }
