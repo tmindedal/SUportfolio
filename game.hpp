@@ -57,6 +57,7 @@ class Monster : public Character {
 
 void combat(Hero &hero, Monster &monster);
 std::vector<Monster> getMonsters();
+std::vector<Hero> getHeroes();
 void gameLoop(Hero& hero);
 
 

@@ -7,7 +7,7 @@
 // Constructor
 Character::Character(std::string name, int health, int strength) {
     this->name = name;
-    this->hp = health;
+    hp = health;
     this->strength = strength;
 }
 
@@ -26,11 +26,11 @@ bool Character::isAlive() const { return hp > 0; }
 // Implementation of the Hero class
 Hero::Hero(std::string name, int health, int strength, int xp, int level) : Character(name, health, strength) {
     this->name = name;
-    this->hp = health;
+    hp = health;
     this->strength = strength;
     this->level = level;
     this->xp = xp;
-    this->maxHp = health; // Set max HP so we can reset the HP after every fight
+    maxHp = health; // Set max HP so we can reset the HP after every fight
 }
 
 // Defining the functions of the Hero class.
@@ -105,10 +105,18 @@ std::vector<Monster> getMonsters() {
     };
 }
 
+std::vector<Hero> getHeroes() {
+    return {
+        Hero("Knight", 10, 2, 0, 1), // name, health, strength, xp, level
+        Hero("Mage", 10, 2, 0, 1),
+        Hero("Witch", 10, 2, 0, 1)
+    };
+}
+
 void gameLoop(Hero& hero) {
     while (true) {
-        std::cout << "Press 0 to exit or any other key to continue: \n";
-        char choice{};
+        std::cout << "Press 0 to exit or any other key to continue: ";
+        char choice;
         std::cin >> choice;
 
         if (choice == '0') break;
