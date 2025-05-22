@@ -42,10 +42,10 @@ void Hero::gainXp(int amount) { xp += amount; }
 
 void Hero::levelUp() {
     if (xp >= level * 1000) {
-        level++;
         strength++;
         maxHp += 2;
         xp -= level * 1000; // Reset XP after leveling up
+        level++;
         std::cout << name << " leveled up to level " << level << "\n";
         std::cout << "New strength: " << strength << "\n";
         std::cout << "New health: " << maxHp << "\n\n";

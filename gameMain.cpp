@@ -3,37 +3,46 @@
 #include <vector>
 
 int main() {
-
-    std::vector<Hero> heroes = getHeroes();
-
     std::cout << "Welcome to the game!" << "\n";
-    std::cout << "Chose your hero: " << "\n";
+    std::cout << "You have the following options: " << "\n";
+    std::cout << "1. Create a new hero" << "\n";
+    std::cout << "2. Load an existing hero" << "\n";
+    std::cout << "3. Exit" << "\n";
 
-    for (size_t i = 0; i < heroes.size(); ++i) {
-        std::cout << i + 1 << ". " << heroes[i].getName() << "\n";
-    }
-    std::cout << "4. Exit" << "\n";
-
-
-    int heroChoice;
+    int choice;
     while (true) {
         std::cout << "Enter the number of your choice: ";
-        std::cin >> heroChoice;
-        if (heroChoice >= 1 && heroChoice <= 4) break; // Valid choice
+        std::cin >> choice;
+        if (choice >= 1 && choice <= 3) break; // Valid choice
         std::cout << "Invalid choice. Please try again." << "\n";
     }
-
-    if (heroChoice == 4) {
+    if (choice == 3) {
         std::cout << "Exiting the game." << "\n";
         return 0;
-    } 
+    }
 
-    Hero hero = heroes[heroChoice - 1]; // Get the selected hero
+    std::cin.ignore(); // Clear the newline character from the input buffer
+    std::string heroName;
+    Hero hero("Default", 10, 2, 0, 1); // Default hero
 
-    std::cout << "You chose: " << hero.getName() << "\n";
+    if (choice == 1) {
+        std::cout << "Enter the name of your hero: ";
+        std::getline(std::cin, heroName);
+        hero = Hero(heroName, 10, 2, 0, 1); // Create a new hero
+        saveHero(hero); // Save the new hero to a file
+        std::cout << "Hero created and saved!" << "\n";
+    } else if (choice == 2) {
+        std::cout << "Enter the name of the hero you want to load: ";
+        std::getline(std::cin, heroName);
+        hero = loadHero(heroName); // Load the existing hero from a file
+        std::cout << "Hero loaded!" << "\n";
+    }
+
+    std::cout << "Good luck on your adventure " << hero.getName() << "\n";
     
     gameLoop(hero); // Start the game loop
     
     std::cout << "Thanks for playing!" << "\n";
+    saveHero(hero); // Save hero
     return 0;
 }
