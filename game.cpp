@@ -139,3 +139,34 @@ void gameLoop(Hero& hero) {
         }
     }
 }
+
+void saveHero(const Hero& hero) {
+    std::ofstream file("hero_save.txt");
+    if (!file) {
+        std::cerr << "Error opening file for saving." << std::endl;
+        return;
+    }
+    else {
+        file << hero.getName() << "\n";
+        file << hero.getHealth() << "\n";
+        file << hero.getStrength() << "\n";
+        file << hero.getXp() << "\n";
+        file << hero.getLevel() << "\n";
+        file.close();
+    } 
+}
+
+Hero loadHero() {
+    std::ifstream file("hero_save.txt");
+    if (!file) {
+        std::cerr << "Error opening file for loading." << std::endl;
+        return;
+    }
+    else {
+        std::string name;
+        int health, strength, xp, level;
+        file >> name >> health >> strength >> xp >> level;
+        Hero hero = Hero(name, health, strength, xp, level);
+        file.close();
+    }
+}

@@ -59,6 +59,8 @@ void combat(Hero &hero, Monster &monster);
 std::vector<Monster> getMonsters();
 std::vector<Hero> getHeroes();
 void gameLoop(Hero& hero);
+void saveHero(const Hero& hero);
+Hero loadHero();
 
 
 #endif // GAME_HPP
