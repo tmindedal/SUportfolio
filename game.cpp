@@ -141,32 +141,36 @@ void gameLoop(Hero& hero) {
 }
 
 void saveHero(const Hero& hero) {
-    std::ofstream file("hero_save.txt");
+    std::string filename = "hero_" + hero.getName() + ".txt";
+    std::ofstream file(filename);
     if (!file) {
         std::cerr << "Error opening file for saving." << std::endl;
         return;
     }
-    else {
-        file << hero.getName() << "\n";
-        file << hero.getHealth() << "\n";
-        file << hero.getStrength() << "\n";
-        file << hero.getXp() << "\n";
-        file << hero.getLevel() << "\n";
-        file.close();
-    } 
+
+    file << hero.getName() << "\n"
+         << hero.getHealth() << "\n"
+         << hero.getStrength() << "\n"
+         << hero.getXp() << "\n"
+         << hero.getLevel() << "\n";
+
+    file.close();
 }
 
-Hero loadHero() {
-    std::ifstream file("hero_save.txt");
+Hero loadHero(const std::string& name) {
+    std::string filename = "hero_" + name + ".txt";
+    std::ifstream file(filename);
     if (!file) {
         std::cerr << "Error opening file for loading." << std::endl;
-        return;
+        return Hero("Default", 10, 2, 0, 1); // fallback
     }
-    else {
-        std::string name;
-        int health, strength, xp, level;
-        file >> name >> health >> strength >> xp >> level;
-        Hero hero = Hero(name, health, strength, xp, level);
-        file.close();
-    }
+
+    std::string heroName;
+    int health, strength, xp, level;
+
+    std::getline(file, heroName); // Reads the first line (name) and stores it in heroName.
+    file >> health >> strength >> xp >> level; // Reads the rest of the lines and stores them in respective variables.
+
+    file.close();
+    return Hero(heroName, health, strength, xp, level);
 }

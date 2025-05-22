@@ -60,7 +60,7 @@ std::vector<Monster> getMonsters();
 std::vector<Hero> getHeroes();
 void gameLoop(Hero& hero);
 void saveHero(const Hero& hero);
-Hero loadHero();
+Hero loadHero(const std::string& heroName);
 
 
 #endif // GAME_HPP
