@@ -34,6 +34,15 @@ int main() {
     } else if (choice == 2) {
         std::cout << "Enter the name of the hero you want to load: ";
         std::getline(std::cin, heroName);
+
+        if (!heroExists(heroName)) {
+            std::cout << "Hero does not exist. Creating a new hero with the same name." << "\n";
+            hero = Hero(heroName, 10, 2, 0, 1); // Create a new hero
+            saveHero(hero); // Save the new hero to a file
+        } else {
+            std::cout << "Loading hero..." << "\n";
+        }
+
         hero = loadHero(heroName); // Load the existing hero from a file
         std::cout << "Hero loaded!" << "\n";
     }

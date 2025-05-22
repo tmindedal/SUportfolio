@@ -61,6 +61,7 @@ std::vector<Hero> getHeroes();
 void gameLoop(Hero& hero);
 void saveHero(const Hero& hero);
 Hero loadHero(const std::string& heroName);
+bool heroExists(const std::string& name);
 
 
 #endif // GAME_HPP

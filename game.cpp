@@ -174,3 +174,9 @@ Hero loadHero(const std::string& name) {
     file.close();
     return Hero(heroName, health, strength, xp, level);
 }
+
+
+bool heroExists(const std::string& name) {
+    std::ifstream file("hero_" + name + ".txt");
+    return file.good();
+}
