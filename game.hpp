@@ -30,9 +30,10 @@ class Hero : public Character {
         int level;
         int xp;
         int maxHp; // To reset HP after every fight
+        int gold; // Added gold attribute for the hero for second iteration.
     
     public:
-        Hero(std::string name, int health = 10, int strength = 2, int xp = 0,  int level = 1);
+        Hero(std::string name, int health = 10, int strength = 2, int xp = 0,  int level = 1, int gold = 0);
         
         int getXp() const;
         int getLevel() const;
@@ -40,7 +41,8 @@ class Hero : public Character {
         void gainXp(int amount);
         void levelUp();
         void resetHp(); // Reset HP to max after every fight
-
+        int getGold() const; // Getter for gold
+        void addGold(int amount);// Method to add gold
 };
 
 class Monster : public Character {
@@ -53,6 +55,24 @@ class Monster : public Character {
         
         int getXpReward() const;  
 };
+
+
+class Cave {
+    private:
+        std::string name;
+        int goldReward;
+        std::vector<Monster> monsters;
+
+    public:
+        Cave(std::string name, int goldReward, std::vector<Monster> monsters);
+        
+        std::string getName() const;
+        int getGoldReward() const;
+        std::vector<Monster>& getMonsters();
+
+};
+
+std::vector<Cave> generateCaves(int heroLevel);
 
 
 void combat(Hero &hero, Monster &monster);

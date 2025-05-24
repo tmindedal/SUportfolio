@@ -24,13 +24,14 @@ bool Character::isAlive() const { return hp > 0; }
 
 
 // Implementation of the Hero class
-Hero::Hero(std::string name, int health, int strength, int xp, int level) : Character(name, health, strength) {
+Hero::Hero(std::string name, int health, int strength, int xp, int level, int gold) : Character(name, health, strength) {
     this->name = name;
     hp = health;
     this->strength = strength;
     this->level = level;
     this->xp = xp;
     maxHp = health; // Set max HP so we can reset the HP after every fight
+    this->gold = gold; // Initialize gold
 }
 
 // Defining the functions of the Hero class.
@@ -115,27 +116,64 @@ std::vector<Hero> getHeroes() {
 
 void gameLoop(Hero& hero) {
     while (true) {
-        std::cout << "Press 0 to exit or any other key to continue: ";
+        std::cout << "Press 0 to exit, 1 to fight a monster or 2 to enter a cave: " << "\n";
         char choice;
         std::cin >> choice;
 
         if (choice == '0') break;
-        else {
-            std::cout << "You continue your adventure!" << "\n\n";
-            std::cout << "List of opponents: " << "\n";
+        
+        else if (choice == '1') {
             std::vector<Monster> monsters = getMonsters();
-            for (int i = 0; i < monsters.size(); i++) {
-                std::cout << i + 1 << ". " << monsters[i].getName() << ", " << monsters[i].getHealth() << " health, " 
-                << monsters[i].getStrength() << " strength, " << "\n";
+            for (size_t i = 0; i < monsters.size(); ++i) {
+                std::cout << i + 1 << ". " << monsters[i].getName() << " (Health: " << monsters[i].getHealth() << ", Strength: " << monsters[i].getStrength() << ")\n";
             }
-            std::cout << "\nChoose your opponent: ";
             int monsterChoice;
+            std::cout << "Choose a monster to fight (1-" << monsters.size() << "): ";
             std::cin >> monsterChoice;
-            if (monsterChoice > 0 && monsterChoice <= monsters.size()) {
-                std::cout << "\nYou chose " << monsters[monsterChoice - 1].getName() << "!" << "\n";
+            if (monsterChoice > 0 && monsterChoice <= static_cast<int>(monsters.size())) {
                 combat(hero, monsters[monsterChoice - 1]);
-                hero.resetHp(); // Reset HP after every fight
+                hero.resetHp(); // Reset hero's HP after the fight
+            } else {
+                std::cout << "Invalid choice." << "\n";
+                continue; // Skip to the next iteration of the loop;
             }
+        }
+
+        else if (choice == '2') {
+            std::vector<Cave> caves = generateCaves(hero.getLevel());
+            for (size_t i = 0; i < caves.size(); ++i) {
+                std::cout << i + 1 << ". " << caves[i].getName() << " (Gold Reward: " << caves[i].getGoldReward() << ")\n";
+            }
+            int caveChoice;
+            std::cout << "Choose a cave to enter (1-" << caves.size() << "): ";
+            std::cin >> caveChoice;
+
+            if (caveChoice > 0 && caveChoice <= static_cast<int>(caves.size())) {
+                Cave selectedCave = caves[caveChoice - 1];
+                std::cout << "You entered the " << selectedCave.getName() << ".\n";
+                for (auto& monster : selectedCave.getMonsters()) {
+                    
+                    if (hero.isAlive()) {
+                        combat(hero, monster);
+                        hero.resetHp(); // Reset hero's HP after the fight
+                    
+                    } else {
+                        std::cout << "You have been defeated in the cave. Game over." << "\n";
+                        break; 
+                    }
+                } 
+                if (hero.isAlive()) {
+                    hero.addGold(selectedCave.getGoldReward()); // Add gold reward after clearing the cave
+                    std::cout << "You succesfully cleared the cave and earned " << selectedCave.getGoldReward() << " gold!" << "\n";
+                }
+            } else {
+                std::cout << "Invalid choice." << "\n";
+                break;
+            }
+        }
+
+        else {
+            std::cout << "Invalid choice. Please try again." << "\n";
         }
     }
 }
@@ -152,7 +190,8 @@ void saveHero(const Hero& hero) {
          << hero.getHealth() << "\n"
          << hero.getStrength() << "\n"
          << hero.getXp() << "\n"
-         << hero.getLevel() << "\n";
+         << hero.getLevel() << "\n"
+         << hero.getGold() << "\n"; // Save gold as well
 
     file.close();
 }
@@ -162,21 +201,53 @@ Hero loadHero(const std::string& name) {
     std::ifstream file(filename);
     if (!file) {
         std::cerr << "Error opening file for loading." << std::endl;
-        return Hero("Default", 10, 2, 0, 1); // fallback
+        return Hero("Default", 10, 2, 0, 1, 0); // fallback
     }
 
     std::string heroName;
-    int health, strength, xp, level;
+    int health, strength, xp, level, gold;
 
     std::getline(file, heroName); // Reads the first line (name) and stores it in heroName.
-    file >> health >> strength >> xp >> level; // Reads the rest of the lines and stores them in respective variables.
+    file >> health >> strength >> xp >> level >> gold; // Reads the rest of the lines and stores them in respective variables.
 
     file.close();
-    return Hero(heroName, health, strength, xp, level);
+    return Hero(heroName, health, strength, xp, level, gold);
 }
 
 
 bool heroExists(const std::string& name) {
     std::ifstream file("hero_" + name + ".txt");
     return file.good();
+}
+
+
+Cave::Cave(std::string name, int goldReward, std::vector<Monster> monsters) {
+    this->name = name;
+    this->goldReward = goldReward;
+    this->monsters = monsters;
+}
+
+std::string Cave::getName() const { return name; }
+int Cave::getGoldReward() const { return goldReward; }
+std::vector<Monster>& Cave::getMonsters() { return monsters; }
+
+int Hero::getGold() const { return gold; }
+void Hero::addGold(int amount) { gold += amount; }
+
+std::vector<Cave> generateCaves(int heroLevel) {
+    std::vector<Cave> caves;
+    std::vector<Monster> monsters = getMonsters();
+
+    // Generate caves based on hero level
+    if (heroLevel < 3) {
+        caves.push_back(Cave("Small Cave", 50, {monsters[0], monsters[1]}));
+    } else if (heroLevel < 5) {
+        caves.push_back(Cave("Goblin Cave", 100, {monsters[2], monsters[3]}));
+    } else if (heroLevel < 7) {
+        caves.push_back(Cave("Strong Goblin Cave", 150, {monsters[4], monsters[5]}));
+    } else {
+        caves.push_back(Cave("Dragon's Nest", 500, {monsters[6], monsters[7]}));
+    }
+
+    return caves;
 }
