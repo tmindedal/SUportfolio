@@ -33,10 +33,11 @@ class Hero : public Character {
         int gold; // Added gold attribute for the hero for second iteration.
     
     public:
-        Hero(std::string name, int health = 10, int strength = 2, int xp = 0,  int level = 1, int gold = 0);
+        Hero(std::string name, int health = 10, int strength = 2, int xp = 0,  int level = 1, int gold = 0, int maxHp = 10);
         
         int getXp() const;
         int getLevel() const;
+        int getMaxHp() const; // Getter for max HP
         
         void gainXp(int amount);
         void levelUp();

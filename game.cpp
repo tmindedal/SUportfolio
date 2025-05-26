@@ -24,13 +24,13 @@ bool Character::isAlive() const { return hp > 0; }
 
 
 // Implementation of the Hero class
-Hero::Hero(std::string name, int health, int strength, int xp, int level, int gold) : Character(name, health, strength) {
+Hero::Hero(std::string name, int health, int strength, int xp, int level, int gold, int maxHp) : Character(name, health, strength) {
     this->name = name;
     hp = health;
     this->strength = strength;
     this->level = level;
     this->xp = xp;
-    maxHp = health; // Set max HP so we can reset the HP after every fight
+    this->maxHp = maxHp; // Set max HP so we can reset the HP after every fight
     this->gold = gold; // Initialize gold
 }
 
@@ -38,6 +38,8 @@ Hero::Hero(std::string name, int health, int strength, int xp, int level, int go
 int Hero::getXp() const { return xp; }
 
 int Hero::getLevel() const { return level; }
+
+int Hero::getMaxHp() const { return maxHp; } // Getter for max HP
 
 void Hero::gainXp(int amount) { xp += amount; }
 
@@ -150,25 +152,29 @@ void gameLoop(Hero& hero) {
 
             if (caveChoice > 0 && caveChoice <= static_cast<int>(caves.size())) {
                 Cave selectedCave = caves[caveChoice - 1];
+                bool caveCleared = true;
                 std::cout << "You entered the " << selectedCave.getName() << ".\n";
                 for (auto& monster : selectedCave.getMonsters()) {
+                    combat(hero, monster);
                     
-                    if (hero.isAlive()) {
-                        combat(hero, monster);
-                        hero.resetHp(); // Reset hero's HP after the fight
                     
-                    } else {
+                    if (!hero.isAlive()) {
                         std::cout << "You have been defeated in the cave. Game over." << "\n";
+                        caveCleared = false;
+                        saveHero(hero); // Save hero before exiting
                         break; 
                     }
+                    hero.resetHp();
+                    
                 } 
-                if (hero.isAlive()) {
+
+                if (caveCleared && hero.isAlive()) {
                     hero.addGold(selectedCave.getGoldReward()); // Add gold reward after clearing the cave
                     std::cout << "You succesfully cleared the cave and earned " << selectedCave.getGoldReward() << " gold!" << "\n";
                 }
             } else {
                 std::cout << "Invalid choice." << "\n";
-                break;
+                ;
             }
         }
 
@@ -191,7 +197,8 @@ void saveHero(const Hero& hero) {
          << hero.getStrength() << "\n"
          << hero.getXp() << "\n"
          << hero.getLevel() << "\n"
-         << hero.getGold() << "\n"; // Save gold as well
+         << hero.getGold() << "\n" // Save gold as well
+         << hero.getMaxHp() << "\n"; // Save max HP
 
     file.close();
 }
@@ -205,13 +212,13 @@ Hero loadHero(const std::string& name) {
     }
 
     std::string heroName;
-    int health, strength, xp, level, gold;
+    int health, strength, xp, level, gold, maxHp;
 
     std::getline(file, heroName); // Reads the first line (name) and stores it in heroName.
-    file >> health >> strength >> xp >> level >> gold; // Reads the rest of the lines and stores them in respective variables.
+    file >> health >> strength >> xp >> level >> gold >> maxHp; // Reads the rest of the lines and stores them in respective variables.
 
     file.close();
-    return Hero(heroName, health, strength, xp, level, gold);
+    return Hero(heroName, health, strength, xp, level, gold, maxHp); // Returns a Hero object with the loaded data.
 }
 
 
@@ -236,17 +243,25 @@ void Hero::addGold(int amount) { gold += amount; }
 
 std::vector<Cave> generateCaves(int heroLevel) {
     std::vector<Cave> caves;
-    std::vector<Monster> monsters = getMonsters();
+    std::vector<Monster> m = getMonsters();
 
     // Generate caves based on hero level
-    if (heroLevel < 3) {
-        caves.push_back(Cave("Small Cave", 50, {monsters[0], monsters[1]}));
-    } else if (heroLevel < 5) {
-        caves.push_back(Cave("Goblin Cave", 100, {monsters[2], monsters[3]}));
-    } else if (heroLevel < 7) {
-        caves.push_back(Cave("Strong Goblin Cave", 150, {monsters[4], monsters[5]}));
+    if (heroLevel <= 3) {
+        caves.push_back(Cave("Weak Horse Cave", 50, {m[0], m[0], m[0]}));
+        caves.push_back(Cave("Weak Goblin Cave", 50, {m[1], m[1], m[1]}));
+        caves.push_back(Cave("Goblin Camp", 50, {m[1], m[2], m[2]}));
+    } else if (heroLevel <= 5) {
+        caves.push_back(Cave("Goblin Cave", 100, {m[2], m[2], m[2]}));
+        caves.push_back(Cave("Strong Goblin Cave", 100, {m[3], m[3], m[3]}));
+        caves.push_back(Cave("Mystical Cave", 100, {m[1], m[3], m[2]}));
+    } else if (heroLevel <= 7) {
+        caves.push_back(Cave("Mystical Cave", 100, {m[1], m[3], m[2]}));
+        caves.push_back(Cave("Strong Goblin Cave", 150, {m[4], m[5], m[4]}));
+        caves.push_back(Cave("Monkey Cave", 150, {m[5], m[5], m[5]}));
     } else {
-        caves.push_back(Cave("Dragon's Nest", 500, {monsters[6], monsters[7]}));
+        caves.push_back(Cave("Strong Goblin Cave", 150, {m[4], m[5], m[4]}));
+        caves.push_back(Cave("Monkey Cave", 150, {m[5], m[5], m[5]}));
+        caves.push_back(Cave("Dragon's Nest", 500, {m[7]}));
     }
 
     return caves;

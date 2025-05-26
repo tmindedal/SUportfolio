@@ -23,12 +23,12 @@ int main() {
 
     std::cin.ignore(); // Clear the newline character from the input buffer
     std::string heroName;
-    Hero hero("Default", 10, 2, 0, 1, 0); // Default hero
+    Hero hero("Default", 10, 2, 0, 1, 0, 10); // Default hero
 
     if (choice == 1) {
         std::cout << "Enter the name of your hero: ";
         std::getline(std::cin, heroName);
-        hero = Hero(heroName, 10, 2, 0, 1, 0); // Create a new hero
+        hero = Hero(heroName, 10, 2, 0, 1, 0, 10); // Create a new hero
         saveHero(hero); // Save the new hero to a file
         std::cout << "Hero created and saved!" << "\n";
     } else if (choice == 2) {
@@ -37,13 +37,14 @@ int main() {
 
         if (!heroExists(heroName)) {
             std::cout << "Hero does not exist. Creating a new hero with the same name." << "\n";
-            hero = Hero(heroName, 10, 2, 0, 1, 0); // Create a new hero
+            hero = Hero(heroName, 10, 2, 0, 1, 0, 10); // Create a new hero
             saveHero(hero); // Save the new hero to a file
         } else {
             std::cout << "Loading hero..." << "\n";
         }
 
         hero = loadHero(heroName); // Load the existing hero from a file
+        hero.resetHp();
         std::cout << "Hero loaded!" << "\n";
     }
 
