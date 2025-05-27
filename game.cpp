@@ -1,6 +1,7 @@
 #include "game.hpp"
 #include <iostream>
 #include <fstream>
+#include <sqlite3.h>
 
 
 // Implementation of the Character class
@@ -265,4 +266,116 @@ std::vector<Cave> generateCaves(int heroLevel) {
     }
 
     return caves;
+}
+
+
+// Implementation of the database functions
+
+void initDatabase() {
+    sqlite3* db;
+
+    // Åben eller opret database med navnet 'heroes.db'
+    int res = sqlite3_open("heroes.db", &db);
+    if (res != SQLITE_OK) {
+        std::cerr << "Error while opening database. \n";
+        return;
+    }
+
+    // Opret tabel hvis den ikke allerede findes
+    const char* createTableSQL = "CREATE TABLE IF NOT EXISTS heroes ("
+                                  "name TEXT PRIMARY KEY, "
+                                  "health INTEGER, "
+                                  "strength INTEGER, "
+                                  "xp INTEGER, "
+                                  "level INTEGER, "
+                                  "gold INTEGER, "
+                                  "maxHp INTEGER);";
+    
+
+    char* errMsg = nullptr;
+    sqlite3_exec(db, createTableSQL, nullptr, nullptr, &errMsg);
+
+    sqlite3_close(db); // Luk databaseforbindelsen
+}
+
+void saveHeroToDatabase(const Hero& hero) {
+    sqlite3* db; // Pointer to the SQLite database
+    sqlite3_open("heroes.db", &db); // Åbner databasen
+
+    // Indsæt eller opdater helten i databasen
+    // Hvis helten allerede findes, opdateres den; ellers indsættes den.
+    const char* sql = "INSERT OR REPLACE INTO heroes (name, hp, maxHp, strength, xp, level, gold) VALUES (?, ?, ?, ?, ?, ?, ?);";
+    
+    sqlite3_stmt* stmt; 
+    sqlite3_prepare_v2(db, sql, -1, &stmt, nullptr);
+
+    // Gem heltens attributter i databasen.
+    sqlite3_bind_text(stmt, 1, hero.getName().c_str(), -1, SQLITE_STATIC);
+    sqlite3_bind_int(stmt, 2, hero.getHealth());
+    sqlite3_bind_int(stmt, 3, hero.getMaxHp());
+    sqlite3_bind_int(stmt, 4, hero.getStrength());
+    sqlite3_bind_int(stmt, 5, hero.getXp());
+    sqlite3_bind_int(stmt, 6, hero.getLevel());
+    sqlite3_bind_int(stmt, 7, hero.getGold());
+
+    sqlite3_step(stmt); // Gem eller opdater helten i databasen
+    sqlite3_finalize(stmt); 
+    sqlite3_close(db); // Luk databaseforbindelsen
+}
+
+
+Hero loadHeroFromDatabase(const std::string& name) {
+
+    Hero hero(name, 10, 2, 0, 1, 0, 10); // Backup helt
+
+    sqlite3* db;
+    sqlite3_open("heroes.db", &db); // Åben database
+
+    const char* sqp = "SELECT * FROM heroes WHERE name = ?;";
+    sqlite3_stmt* stmt;
+    sqlite3_prepare_v2(db, sqp, -1, &stmt, nullptr);
+    sqlite3_bind_text(stmt, 1, name.c_str(), -1, SQLITE_STATIC);
+
+    if (sqlite3_step(stmt) == SQLITE_ROW) {
+        // Hent data fra databasen
+        std::string heroName = reinterpret_cast<const char*>(sqlite3_column_text(stmt, 0));
+        int health = sqlite3_column_int(stmt, 1);
+        int strength = sqlite3_column_int(stmt, 2);
+        int xp = sqlite3_column_int(stmt, 3);
+        int level = sqlite3_column_int(stmt, 4);
+        int gold = sqlite3_column_int(stmt, 5);
+        int maxHp = sqlite3_column_int(stmt, 6);
+
+        // Opret en Hero-objekt med de hentede data
+        hero = Hero(heroName, health, strength, xp, level, gold, maxHp);
+    }
+
+    sqlite3_finalize(stmt); 
+    sqlite3_close(db); // Luk databaseforbindelsen
+    return hero; // Returner helten
+
+}
+
+
+bool heroExistsInDatabase(const std::string& name) {
+
+    sqlite3* db;
+    sqlite3_open("heroes.db", &db); // Åben database
+
+    const char* sql = "SELECT COUNT(*) FROM heroes WHERE name = ?;";
+    sqlite3_stmt* stmt;
+
+    sqlite3_prepare_v2(db, sql, -1, &stmt, nullptr);
+    sqlite3_bind_text(stmt, 1, name.c_str(), -1, SQLITE_STATIC);
+
+    bool exists = false;
+
+    if (sqlite3_step(stmt) == SQLITE_ROW) {
+        exists = sqlite3_column_int(stmt, 0) > 0; // Hvis antallet er større end 0, findes helten
+    }
+
+    sqlite3_finalize(stmt); 
+    sqlite3_close(db); // Luk databaseforbindelsen
+    return exists; // Returner om helten findes
+
 }

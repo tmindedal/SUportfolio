@@ -3,6 +3,7 @@
 
 #include <string>
 #include <vector>
+#include <sqlite3.h>
 
 class Character {
     
@@ -83,6 +84,15 @@ void gameLoop(Hero& hero);
 void saveHero(const Hero& hero);
 Hero loadHero(const std::string& heroName);
 bool heroExists(const std::string& name);
+
+
+
+// SQLite database functions
+void initDatabase();
+void saveHeroToDatabase(const Hero& hero);
+Hero loadHeroFromDatabase(const std::string& name);
+bool heroExistsInDatabase(const std::string& name);
+
 
 
 #endif // GAME_HPP
