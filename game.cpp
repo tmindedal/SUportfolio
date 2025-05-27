@@ -174,7 +174,19 @@ void gameLoop(Hero& hero) {
                 if (caveCleared && hero.isAlive()) {
                     hero.addGold(selectedCave.getGoldReward()); // Add gold reward after clearing the cave
                     std::cout << "You succesfully cleared the cave and earned " << selectedCave.getGoldReward() << " gold!" << "\n";
+
+                    if (selectedCave.getName() == "Weak Horse Cave") { hero.setWeapon(Weapon("Wooden Sword", 2, 0, 10)); }
+                    else if (selectedCave.getName() == "Weak Goblin Cave") { hero.setWeapon(Weapon("Rusty Sword", 3, 0, 10)); }
+                    else if (selectedCave.getName() == "Goblin Camp") { hero.setWeapon(Weapon("Steel Sword", 4, 0, 10)); }
+                    else if (selectedCave.getName() == "Goblin Cave") { hero.setWeapon(Weapon("Silver Sword", 5, 0, 10)); }
+                    else if (selectedCave.getName() == "Strong Goblin Cave") { hero.setWeapon(Weapon("Gold Sword", 6, 0, 10)); }
+                    else if (selectedCave.getName() == "Mystical Cave") { hero.setWeapon(Weapon("Mystic Sword", 7, 0, 10)); }
+                    else if (selectedCave.getName() == "Monkey Cave") { hero.setWeapon(Weapon("Legendary Sword", 8, 0, 10)); }
+                    else if (selectedCave.getName() == "Dragon's Nest") { hero.setWeapon(Weapon("Dragon Slayer", 10, 0, 10)); }
+                    
+                    std::cout << "You found a new weapon: " << hero.getWeapon().getName() << " with " << hero.getWeapon().getDamage() << " damage!" << "\n";
                 }
+
             } else {
                 std::cout << "Invalid choice." << "\n";
                 ;
