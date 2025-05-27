@@ -1,0 +1,21 @@
+-- Opretter en tabel til at gemme data om helt.
+CREATE TABLE IF NOT EXISTS heroes (
+    name TEXT PRIMARY KEY,
+    health INTEGER,
+    maxHp INTEGER,
+    strength INTEGER,
+    xp INTEGER,
+    level INTEGER,
+    gold INTEGER,
+    weapon_name TEXT,
+    weapon_damage INTEGER,
+    weapon_strengthModifier INTEGER,
+    weapon_durability INTEGER
+);
+
+-- Opretter en tabel til at gemme kills per helt og våben.
+CREATE TABLE IF NOT EXISTS kills (
+    hero_name TEXT,
+    weapon_name TEXT,
+    PRIMARY KEY (hero_name, weapon_name)
+);
