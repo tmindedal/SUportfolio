@@ -462,3 +462,123 @@ void registerKillInDatabase(const std::string& heroName, const std::string& weap
     sqlite3_finalize(stmt);
     sqlite3_close(db);
 }
+
+
+// Funktioner til at analysere data fra databasen
+
+void showHereoesAlphabetically() {
+
+    // Åben databaseforbindelsen.
+    sqlite3* db;
+    sqlite3_open("heroes.db", &db);
+
+    // SQL-forespørgsel for at hente helte sorteret alfabetisk
+    const char* sql = "SELECT name FROM heroes ORDER BY name ASC;";
+
+    // Forbered SQL-forespørgslen
+    sqlite3_stmt* stmt;
+    sqlite3_prepare_v2(db, sql, -1, &stmt, nullptr);
+
+    // Udfør forespørgslen og udskriv resultaterne
+    std::cout << "Heroes sorted alphabetically:\n";
+    while (sqlite3_step(stmt) == SQLITE_ROW) {
+
+        // Hent navne og print dem
+        std::string name = reinterpret_cast<const char*>(sqlite3_column_text(stmt, 0));
+        std::cout << "- " << name << "\n";
+
+    }
+    sqlite3_finalize(stmt); // Fjern prepared statement
+    sqlite3_close(db); // Luk databaseforbindelsen
+}
+
+void showTotalKills() {
+    // Åben databaseforbindelsen.
+    sqlite3* db;
+    sqlite3_open("heroes.db", &db);
+
+    // SQL-forespørgsel som summer alle kills for hver helt.
+    const char* sql = "SELECT heroName, SUM(kills) FROM kills GROUP BY heroName;";
+
+    // Forbered SQL-forespørgslen
+    sqlite3_stmt* stmt;
+    sqlite3_prepare_v2(db, sql, -1, &stmt, nullptr);
+
+    std::cout << "Total kills by each hero:\n";
+    while (sqlite3_step(stmt) == SQLITE_ROW) {
+        // Hent heltenavn (0) og antal kills (1) og print dem.
+        std::string heroName = reinterpret_cast<const char*>(sqlite3_column_text(stmt, 0));
+        int totalKills = sqlite3_column_int(stmt, 1);
+        std::cout << heroName << ": " << totalKills << " kills\n";
+    }
+
+    sqlite3_finalize(stmt); // Fjern prepared statement
+    sqlite3_close(db); // Luk databaseforbindelsen
+
+}
+
+void showTopHeroForWeapon() {
+
+    // Åben databaseforbindelsen.
+    sqlite3* db;
+    sqlite3_open("heroes.db", &db);
+
+    // SQL-forespørgsel for at hente helten med flest kills for hver våben.
+    const char* sql = 
+        "SELECT heroName, weaponName, MAX(kills) "
+        "FROM kills "
+        "GROUP BY weaponName;";
+
+    // Forbered SQL-forespørgslen
+    sqlite3_stmt* stmt;
+    sqlite3_prepare_v2(db, sql, -1, &stmt, nullptr);
+
+    std::cout << "Top hero for each weapon:\n";
+
+    while (sqlite3_step(stmt) == SQLITE_ROW) {
+        // Hent heltenavn (0), våben navn (1) og antal kills (2) og print dem.
+        std::string heroName = reinterpret_cast<const char*>(sqlite3_column_text(stmt, 0));
+        std::string weaponName = reinterpret_cast<const char*>(sqlite3_column_text(stmt, 1));
+        int totalKills = sqlite3_column_int(stmt, 2);
+
+        std::cout << heroName << " with " << weaponName << ": " << totalKills << " kills\n";
+    }
+
+    sqlite3_finalize(stmt); // Fjern prepared statement
+    sqlite3_close(db); // Luk databaseforbindelsen
+
+}
+
+void showKillsPerWeapon(const std::string& heroName) {
+    // Åben databaseforbindelsen.
+    sqlite3* db;
+    sqlite3_open("heroes.db", &db);
+
+    // SQL-forespørgsel for at hente antal kills for hver våben for en specifik helt.
+    const char* sql = 
+        "SELECT weaponName, kills "
+        "FROM kills "
+        "WHERE heroName = ?;";
+
+    // Forbered SQL-forespørgslen
+    sqlite3_stmt* stmt;
+    sqlite3_prepare_v2(db, sql, -1, &stmt, nullptr);
+
+    // Bind heltenavn til forespørgslen
+    sqlite3_bind_text(stmt, 1, heroName.c_str(), -1, SQLITE_STATIC);
+
+    std::cout << "Kills per weapon for " << heroName << ":\n";
+
+    // Udfør forespørgslen og udskriv resultaterne
+    while (sqlite3_step(stmt) == SQLITE_ROW) {
+        std::string weapon = reinterpret_cast<const char*>(sqlite3_column_text(stmt, 0));
+        int kills = sqlite3_column_int(stmt, 1);
+
+        // Print våben og antal kills
+        std::cout << weapon << ": " << kills << " kills\n";
+
+    }
+
+    sqlite3_finalize(stmt); // Fjern prepared statement
+    sqlite3_close(db); // Luk databaseforbindelsen
+}

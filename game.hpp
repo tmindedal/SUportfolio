@@ -140,6 +140,12 @@ bool heroExistsInDatabase(const std::string& name);
 void registerKillInDatabase(const std::string& heroName, const std::string& weaponName);
 
 
+// Funktioner til at analysere data fra databasen
+void showHereoesAlphabetically();
+void showTotalKills();
+void showTopHeroForWeapon();
+void showKillsPerWeapon(const std::string& heroName);
+
 
 
 

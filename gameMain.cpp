@@ -10,16 +10,17 @@ int main() {
     std::cout << "You have the following options: " << "\n";
     std::cout << "1. Create a new hero" << "\n";
     std::cout << "2. Load an existing hero" << "\n";
-    std::cout << "3. Exit" << "\n";
+    std::cout << "3. Analyse" << "\n";
+    std::cout << "4. Exit" << "\n";
 
     int choice;
     while (true) {
         std::cout << "Enter the number of your choice: ";
         std::cin >> choice;
-        if (choice >= 1 && choice <= 3) break; // Valid choice
+        if (choice >= 1 && choice <= 4) break; // Valid choice
         std::cout << "Invalid choice. Please try again." << "\n";
     }
-    if (choice == 3) {
+    if (choice == 4) {
         std::cout << "Exiting the game." << "\n";
         return 0;
     }
@@ -61,6 +62,41 @@ int main() {
           << " | Damage: " << w.getDamage()
           << " | Strength Modifier: " << w.getStrengthModifier()
           << " | Durability: " << w.getDurability() << "\n";
+
+    } else if (choice == 3) {
+        std::cout << "Chose what to analyse\n";
+
+        std::cout << "1. Show heroes alphabetically\n";
+        std::cout << "2. Show total kills by each hero\n";
+        std::cout << "3. Show top hero for each weapon\n";
+        std::cout << "4. Show kills per weapon for a specific hero\n";
+        std::cout << "5. Exit\n";
+
+        int analysisChoice;
+        while (true) {
+            std::cout << "Enter the number of your choice: ";
+            std::cin >> analysisChoice;
+            if (analysisChoice >= 1 && analysisChoice <= 5) break; // Valid choice
+            std::cout << "Invalid choice. Please try again." << "\n";
+        }
+        
+        if (analysisChoice == 5) {
+            std::cout << "Exiting analysis." << "\n";
+            return 0;
+        }
+
+        std::cin.ignore(); // Clear the newline character from the input buffer
+        if (analysisChoice == 1) {
+            showHereoesAlphabetically();
+        } else if (analysisChoice == 2) {
+            showTotalKills();
+        } else if (analysisChoice == 3) {
+            showTopHeroForWeapon();
+        } else if (analysisChoice == 4) {
+            std::cout << "Enter the name of the hero: ";
+            std::getline(std::cin, heroName);
+            showKillsPerWeapon(heroName);
+        }
 
     }
 
