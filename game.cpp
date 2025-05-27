@@ -306,7 +306,7 @@ void saveHeroToDatabase(const Hero& hero) {
 
     // Indsæt eller opdater helten i databasen
     // Hvis helten allerede findes, opdateres den; ellers indsættes den.
-    const char* sql = "INSERT OR REPLACE INTO heroes (name, hp, maxHp, strength, xp, level, gold) VALUES (?, ?, ?, ?, ?, ?, ?);";
+    const char* sql = "INSERT OR REPLACE INTO heroes (name, health, maxHp, strength, xp, level, gold) VALUES (?, ?, ?, ?, ?, ?, ?);";
     
     sqlite3_stmt* stmt; 
     sqlite3_prepare_v2(db, sql, -1, &stmt, nullptr);

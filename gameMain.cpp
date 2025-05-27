@@ -3,6 +3,9 @@
 #include <vector>
 
 int main() {
+
+    initDatabase(); // Initialiser database
+
     std::cout << "Welcome to the game!" << "\n";
     std::cout << "You have the following options: " << "\n";
     std::cout << "1. Create a new hero" << "\n";
@@ -34,8 +37,6 @@ int main() {
     } else if (choice == 2) {
         std::cout << "Enter the name of the hero you want to load: ";
         std::getline(std::cin, heroName);
-
-        initDatabase(); // Kør altid dette først
 
         if (!heroExistsInDatabase(heroName)) {
             hero = Hero(heroName, 10, 2, 0, 1, 0, 10);
