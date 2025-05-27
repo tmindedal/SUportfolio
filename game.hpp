@@ -3,7 +3,9 @@
 
 #include <string>
 #include <vector>
-#include <sqlite3.h>
+extern "C" {
+    #include "sqlite3.h"
+}
 
 class Character {
     
@@ -81,9 +83,9 @@ void combat(Hero &hero, Monster &monster);
 std::vector<Monster> getMonsters();
 std::vector<Hero> getHeroes();
 void gameLoop(Hero& hero);
-void saveHero(const Hero& hero);
-Hero loadHero(const std::string& heroName);
-bool heroExists(const std::string& name);
+// void saveHero(const Hero& hero);
+// Hero loadHero(const std::string& heroName);
+// bool heroExists(const std::string& name);
 
 
 

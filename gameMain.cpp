@@ -29,21 +29,22 @@ int main() {
         std::cout << "Enter the name of your hero: ";
         std::getline(std::cin, heroName);
         hero = Hero(heroName, 10, 2, 0, 1, 0, 10); // Create a new hero
-        saveHero(hero); // Save the new hero to a file
+        saveHeroToDatabase(hero); // Save the new hero to a file
         std::cout << "Hero created and saved!" << "\n";
     } else if (choice == 2) {
         std::cout << "Enter the name of the hero you want to load: ";
         std::getline(std::cin, heroName);
 
-        if (!heroExists(heroName)) {
-            std::cout << "Hero does not exist. Creating a new hero with the same name." << "\n";
-            hero = Hero(heroName, 10, 2, 0, 1, 0, 10); // Create a new hero
-            saveHero(hero); // Save the new hero to a file
+        initDatabase(); // Kør altid dette først
+
+        if (!heroExistsInDatabase(heroName)) {
+            hero = Hero(heroName, 10, 2, 0, 1, 0, 10);
+            saveHeroToDatabase(hero);
         } else {
-            std::cout << "Loading hero..." << "\n";
+            std::cout << "Loading hero...\n";
+            hero = loadHeroFromDatabase(heroName);
         }
 
-        hero = loadHero(heroName); // Load the existing hero from a file
         hero.resetHp();
         std::cout << "Hero loaded!" << "\n";
     }
@@ -53,7 +54,7 @@ int main() {
     gameLoop(hero); // Start the game loop
     
     std::cout << "Thanks for playing!" << "\n";
-    saveHero(hero); // Save hero
+    saveHeroToDatabase(hero); // Save hero
     return 0;
 }
 

@@ -1,7 +1,9 @@
 #include "game.hpp"
 #include <iostream>
 #include <fstream>
-#include <sqlite3.h>
+extern "C" {
+    #include "sqlite3.h"
+}
 
 
 // Implementation of the Character class
@@ -162,7 +164,7 @@ void gameLoop(Hero& hero) {
                     if (!hero.isAlive()) {
                         std::cout << "You have been defeated in the cave. Game over." << "\n";
                         caveCleared = false;
-                        saveHero(hero); // Save hero before exiting
+                        saveHeroToDatabase(hero); // Save hero before exiting
                         break; 
                     }
                     hero.resetHp();
@@ -185,7 +187,7 @@ void gameLoop(Hero& hero) {
     }
 }
 
-void saveHero(const Hero& hero) {
+/*void saveHero(const Hero& hero) {
     std::string filename = "hero_" + hero.getName() + ".txt";
     std::ofstream file(filename);
     if (!file) {
@@ -227,7 +229,7 @@ bool heroExists(const std::string& name) {
     std::ifstream file("hero_" + name + ".txt");
     return file.good();
 }
-
+*/
 
 Cave::Cave(std::string name, int goldReward, std::vector<Monster> monsters) {
     this->name = name;

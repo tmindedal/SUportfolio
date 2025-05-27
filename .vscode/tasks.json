@@ -1,0 +1,26 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Build Game with SQLite",
+      "type": "shell",
+      "command": "g++",
+      "args": [
+        "gameMain.cpp",
+        "game.cpp",
+        "sqlite3.c",
+        "-o",
+        "main.exe",
+        "-std=c++17",
+        "-Wall",
+        "-Wno-write-strings"
+      ],
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      },
+      "problemMatcher": ["$gcc"],
+      "detail": "Bygger spillet med SQLite3 integration"
+    }
+  ]
+}
