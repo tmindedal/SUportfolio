@@ -157,7 +157,7 @@ CMAKE_PROJECT_DESCRIPTION:STATIC=
 CMAKE_PROJECT_HOMEPAGE_URL:STATIC=
 
 //Value Computed by CMake
-CMAKE_PROJECT_NAME:STATIC=HeroGame
+CMAKE_PROJECT_NAME:STATIC=SqliteGame
 
 //Path to a program.
 CMAKE_RANLIB:FILEPATH=C:/Users/tmind/OneDrive/Skrivebord/idk/mingw64/bin/ranlib.exe
@@ -250,6 +250,15 @@ HeroGame_IS_TOP_LEVEL:STATIC=ON
 
 //Value Computed by CMake
 HeroGame_SOURCE_DIR:STATIC=C:/Users/tmind/OneDrive/Skrivebord/Robotteknologi/AndetSemester/Softwareudvikling/portfolio
+
+//Value Computed by CMake
+SqliteGame_BINARY_DIR:STATIC=C:/Users/tmind/OneDrive/Skrivebord/Robotteknologi/AndetSemester/Softwareudvikling/portfolio/build
+
+//Value Computed by CMake
+SqliteGame_IS_TOP_LEVEL:STATIC=ON
+
+//Value Computed by CMake
+SqliteGame_SOURCE_DIR:STATIC=C:/Users/tmind/OneDrive/Skrivebord/Robotteknologi/AndetSemester/Softwareudvikling/portfolio
 
 
 ########################
