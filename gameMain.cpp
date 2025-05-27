@@ -50,7 +50,9 @@ int main() {
         hero.resetHp();
         std::cout << "Hero loaded!" << "\n";
         std::cout << "Hero Name: " << hero.getName() << "\n";
-        std::cout << "Hero Level: " << hero.getLevel() << "\n"; 
+        std::cout << "Hero Level: " << hero.getLevel() << "\n";
+        std::cout << "Hero Health: " << hero.getHealth() << "/" << hero.getMaxHp() << "\n";
+        std::cout << "Hero Strength: " << hero.getStrength() << "\n"; 
         std::cout << "Hero XP: " << hero.getXp() << "\n";
         std::cout << "Hero Gold: " << hero.getGold() << "\n";
         Weapon w = hero.getWeapon();

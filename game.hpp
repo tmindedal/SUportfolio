@@ -3,6 +3,7 @@
 
 #include <string>
 #include <vector>
+#include <iostream>
 extern "C" {
     #include "sqlite3.h"
 }
@@ -28,8 +29,11 @@ class Weapon {
         int getStrengthModifier() const { return strengthModifier; }
         int getDurability() const { return durability; }
 
-        void reduceDurability(int amount) {
+        void reduceDurability() {
             if (durability > 0) durability--; // Ensure durability doesn't go below 0
+            if (durability == 0) {
+                std::cout << "Your weapon is broken!" << "\n";
+            }
         }
 
         // Check if the weapon is broken

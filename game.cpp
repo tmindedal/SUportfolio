@@ -76,8 +76,9 @@ void combat(Hero &hero, Monster &monster) {
     std::cout << "The battle between " << hero.getName() << " and " << monster.getName() << " begins! " << "\n\n";
 
     while (hero.isAlive() && monster.isAlive()) {
-        std::cout << hero.getName() << " attacks " << monster.getName() << " and deals " << hero.getStrength() << " damage!" << "\n";
-        monster.damage(hero.getStrength());
+        int totalStrength = hero.getStrength() + hero.getWeapon().getDamage() + ( hero.getLevel() * hero.getWeapon().getStrengthModifier() );
+        std::cout << hero.getName() << " attacks " << monster.getName() << " and deals " << totalStrength << " damage!" << "\n";
+        monster.damage(totalStrength);
         std::cout << monster.getName() << " has " << monster.getHealth() << " health left." << "\n";
         if (!monster.isAlive()) break;
 
@@ -91,9 +92,21 @@ void combat(Hero &hero, Monster &monster) {
         hero.gainXp(monster.getXpReward());
         std::cout << hero.getName() << " gained " << monster.getXpReward() << " XP!" << "\n\n";
         hero.levelUp(); // Check if the hero levels up after gaining XP
+        
+        // getWeapon() is a const method so im making a copy and setting it as the new weapon to reduce durability.
+        Weapon currentWeapon = hero.getWeapon();
+        currentWeapon.setDurability(currentWeapon.getDurability() - 1); // Reduce weapon durability by 1
+        hero.setWeapon(currentWeapon); // Set the new weapon with reduced durability 
+        std::cout << "Your weapon's durability is now: " << hero.getWeapon().getDurability() << "\n";
 
     } else {
         std::cout << "You lost the battle " << hero.getName() << "!" << "\n\n";
+        
+        // same thing
+        Weapon currentWeapon = hero.getWeapon();
+        currentWeapon.setDurability(currentWeapon.getDurability() - 1); // Reduce weapon durability by 1
+        hero.setWeapon(currentWeapon); // Set the new weapon with reduced durability 
+        std::cout << "Your weapon's durability is now: " << hero.getWeapon().getDurability() << "\n";
     }
 }
 
