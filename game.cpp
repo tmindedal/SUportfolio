@@ -99,6 +99,10 @@ void combat(Hero &hero, Monster &monster) {
         hero.setWeapon(currentWeapon); // Set the new weapon with reduced durability 
         std::cout << "Your weapon's durability is now: " << hero.getWeapon().getDurability() << "\n";
 
+        // Register the kill in the database
+        registerKillInDatabase(hero.getName(), hero.getWeapon().getName());
+
+
     } else {
         std::cout << "You lost the battle " << hero.getName() << "!" << "\n\n";
         
@@ -309,26 +313,31 @@ void initDatabase() {
     }
 
     // Opret tabel hvis den ikke allerede findes
-    const char* createTableSQL = "CREATE TABLE IF NOT EXISTS heroes ("
-                                  "name TEXT PRIMARY KEY, "
-                                  "health INTEGER, "
-                                  "strength INTEGER, "
-                                  "xp INTEGER, "
-                                  "level INTEGER, "
-                                  "gold INTEGER, "
-                                  "maxHp INTEGER, "
-                                  "weapon_name TEXT DEFAULT 'None', "
-                                  "weapon_damage INTEGER DEFAULT 0, "
-                                  "weapon_modifier INTEGER DEFAULT 0, "
-                                  "weapon_durability INTEGER DEFAULT 0"
-                                  ");";
+    const char* createTableSQL = 
+        "CREATE TABLE IF NOT EXISTS heroes ("
+        "name TEXT PRIMARY KEY, "
+        "health INTEGER, "
+        "strength INTEGER, "
+        "xp INTEGER, "
+        "level INTEGER, "
+        "gold INTEGER, "
+        "maxHp INTEGER, "
+        "weapon_name TEXT DEFAULT 'None', "
+        "weapon_damage INTEGER DEFAULT 0, "
+        "weapon_modifier INTEGER DEFAULT 0, "
+        "weapon_durability INTEGER DEFAULT 0"
+        ");";
     
+    sqlite3_exec(db, createTableSQL, nullptr, nullptr, nullptr);
 
-    char* errMsg = nullptr;
-    res = sqlite3_exec(db, createTableSQL, nullptr, nullptr, &errMsg);
-    if (res != SQLITE_OK) {
-        std::cerr << "Error with SQL \n";
-    }
+     const char* createKillsSQL =
+        "CREATE TABLE IF NOT EXISTS kills ("
+        "heroName TEXT, "
+        "weaponName TEXT, "
+        "kills INTEGER DEFAULT 0, "
+        "PRIMARY KEY (heroName, weaponName));";
+
+    sqlite3_exec(db, createKillsSQL, nullptr, nullptr, nullptr);
 
     sqlite3_close(db); // Luk databaseforbindelsen
 }
@@ -432,4 +441,24 @@ bool heroExistsInDatabase(const std::string& name) {
     sqlite3_close(db); // Luk databaseforbindelsen
     return exists; // Returner om helten findes
 
+}
+
+void registerKillInDatabase(const std::string& heroName, const std::string& weaponName) {
+    sqlite3* db;
+    sqlite3_open("heroes.db", &db);
+
+    const char* sql = 
+        "INSERT INTO kills (heroName, weaponName, kills) "
+        "VALUES (?, ?, 1) "
+        "ON CONFLICT(heroName, weaponName) DO UPDATE SET kills = kills + 1;";
+
+    sqlite3_stmt* stmt;
+    sqlite3_prepare_v2(db, sql, -1, &stmt, nullptr);
+
+    sqlite3_bind_text(stmt, 1, heroName.c_str(), -1, SQLITE_STATIC);
+    sqlite3_bind_text(stmt, 2, weaponName.c_str(), -1, SQLITE_STATIC);
+
+    sqlite3_step(stmt);
+    sqlite3_finalize(stmt);
+    sqlite3_close(db);
 }

@@ -137,6 +137,8 @@ void initDatabase();
 void saveHeroToDatabase(const Hero& hero);
 Hero loadHeroFromDatabase(const std::string& name);
 bool heroExistsInDatabase(const std::string& name);
+void registerKillInDatabase(const std::string& heroName, const std::string& weaponName);
+
 
 
 
