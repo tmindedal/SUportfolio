@@ -53,6 +53,12 @@ int main() {
         std::cout << "Hero Level: " << hero.getLevel() << "\n"; 
         std::cout << "Hero XP: " << hero.getXp() << "\n";
         std::cout << "Hero Gold: " << hero.getGold() << "\n";
+        Weapon w = hero.getWeapon();
+        std::cout << "Weapon equipped:\n";
+        std::cout << "Name: " << w.getName() 
+          << " | Damage: " << w.getDamage()
+          << " | Strength Modifier: " << w.getStrengthModifier()
+          << " | Durability: " << w.getDurability() << "\n";
 
     }
 
