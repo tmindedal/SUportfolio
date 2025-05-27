@@ -1,0 +1,5 @@
+# ninja log v6
+4	1222	7700646004518954	CMakeFiles/main.dir/gameMain.cpp.obj	dc31e78449b1d431
+11	1619	7700646004583052	CMakeFiles/main.dir/game.cpp.obj	c4cec1af32945bde
+16	6161	7700646004645523	CMakeFiles/main.dir/sqlite3.c.obj	157e20dce0c5a385
+6162	6366	7700646066074376	main.exe	39a0eb576400dc79
