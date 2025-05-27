@@ -7,6 +7,40 @@ extern "C" {
     #include "sqlite3.h"
 }
 
+// Weapon Class
+class Weapon {
+    private:
+        std::string name;
+        int damage;
+        int strengthModifier;
+        int durability;
+
+    public:
+        Weapon(std::string name ="None", int dmg = 0, int strMod = 0, int dur = 0) {
+            this ->name = name;
+            this ->damage = dmg;
+            this ->strengthModifier = strMod;
+            this ->durability = dur;
+        }
+
+        std::string getName() const { return name; }
+        int getDamage() const { return damage; }
+        int getStrengthModifier() const { return strengthModifier; }
+        int getDurability() const { return durability; }
+
+        void reduceDurability(int amount) {
+            if (durability > 0) durability--; // Ensure durability doesn't go below 0
+        }
+
+        // Check if the weapon is broken
+        bool isBroken() const { return durability <= 0; }
+
+        void setName(std::string newName) { name = newName; }
+        void setDamage(int newDamage) { damage = newDamage; }
+        void setStrengthModifier(int newStrengthModifier) { strengthModifier = newStrengthModifier; }
+        void setDurability(int newDurability) { durability = newDurability; }
+};
+
 class Character {
     
     protected:
@@ -99,42 +133,6 @@ void initDatabase();
 void saveHeroToDatabase(const Hero& hero);
 Hero loadHeroFromDatabase(const std::string& name);
 bool heroExistsInDatabase(const std::string& name);
-
-
-
-// Weapon Class
-class Weapon {
-    private:
-        std::string name;
-        int damage;
-        int strengthModifier;
-        int durability;
-
-    public:
-        Weapon(std::string name ="None", int dmg = 0, int strMod = 0, int dur = 0) {
-            this ->name = name;
-            this ->damage = dmg;
-            this ->strengthModifier = strMod;
-            this ->durability = dur;
-        }
-
-        std::string getName() const { return name; }
-        int getDamage() const { return damage; }
-        int getStrengthModifier() const { return strengthModifier; }
-        int getDurability() const { return durability; }
-
-        void reduceDurability(int amount) {
-            if (durability > 0) durability--; // Ensure durability doesn't go below 0
-        }
-
-        // Check if the weapon is broken
-        bool isBroken() const { return durability <= 0; }
-
-        void setName(std::string newName) { name = newName; }
-        void setDamage(int newDamage) { damage = newDamage; }
-        void setStrengthModifier(int newStrengthModifier) { strengthModifier = newStrengthModifier; }
-        void setDurability(int newDurability) { durability = newDurability; }
-};
 
 
 
