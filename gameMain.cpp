@@ -64,40 +64,47 @@ int main() {
           << " | Durability: " << w.getDurability() << "\n";
 
     } else if (choice == 3) {
-        std::cout << "Chose what to analyse\n";
-
-        std::cout << "1. Show heroes alphabetically\n";
-        std::cout << "2. Show total kills by each hero\n";
-        std::cout << "3. Show top hero for each weapon\n";
-        std::cout << "4. Show kills per weapon for a specific hero\n";
-        std::cout << "5. Exit\n";
-
+        
         int analysisChoice;
         while (true) {
+            std::cout << "Chose what to analyse\n";
+            std::cout << "1. Show heroes alphabetically\n";
+            std::cout << "2. Show total kills by each hero\n";
+            std::cout << "3. Show top hero for each weapon\n";
+            std::cout << "4. Show kills per weapon for a specific hero\n";
+            std::cout << "5. Exit\n";
+
             std::cout << "Enter the number of your choice: ";
             std::cin >> analysisChoice;
-            if (analysisChoice >= 1 && analysisChoice <= 5) break; // Valid choice
-            std::cout << "Invalid choice. Please try again." << "\n";
-        }
-        
-        if (analysisChoice == 5) {
-            std::cout << "Exiting analysis." << "\n";
-            return 0;
-        }
 
-        std::cin.ignore(); // Clear the newline character from the input buffer
-        if (analysisChoice == 1) {
-            showHereoesAlphabetically();
-        } else if (analysisChoice == 2) {
-            showTotalKills();
-        } else if (analysisChoice == 3) {
-            showTopHeroForWeapon();
-        } else if (analysisChoice == 4) {
-            std::cout << "Enter the name of the hero: ";
-            std::getline(std::cin, heroName);
-            showKillsPerWeapon(heroName);
-        }
+            if (analysisChoice < 1 || analysisChoice > 5) {
+                std::cout << "Invalid choice. Please try again." << "\n";
+                continue; // Prompt again
+            }
+            
+            if (analysisChoice == 5) {
+                std::cout << "Exiting analysis." << "\n";
+                return 0;
+            }
 
+            std::cin.ignore(); // Clear the newline character from the input buffer
+
+            if (analysisChoice == 1) {
+                showHereoesAlphabetically();
+
+            } else if (analysisChoice == 2) {
+                showTotalKills();
+
+            } else if (analysisChoice == 3) {
+                showTopHeroForWeapon();
+
+            } else if (analysisChoice == 4) {
+                std::cout << "Enter the name of the hero: ";
+                std::getline(std::cin, heroName);
+                showKillsPerWeapon(heroName);
+            }
+            std::cout << "\n"; // Newline for better readability
+        }
     }
 
     std::cout << "Good luck on your adventure " << hero.getName() << "\n";
