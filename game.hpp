@@ -34,6 +34,8 @@ class Hero : public Character {
         int xp;
         int maxHp; // To reset HP after every fight
         int gold; // Added gold attribute for the hero for second iteration.
+
+        Weapon weapon; // Weapon attribute for the hero
     
     public:
         Hero(std::string name, int health = 10, int strength = 2, int xp = 0,  int level = 1, int gold = 0, int maxHp = 10);
@@ -47,6 +49,9 @@ class Hero : public Character {
         void resetHp(); // Reset HP to max after every fight
         int getGold() const; // Getter for gold
         void addGold(int amount);// Method to add gold
+
+        Weapon getWeapon() const { return weapon; } // Getter for weapon
+        void setWeapon(const Weapon& newWeapon) { weapon = newWeapon; } // Setter for weapon
 };
 
 class Monster : public Character {
@@ -94,6 +99,43 @@ void initDatabase();
 void saveHeroToDatabase(const Hero& hero);
 Hero loadHeroFromDatabase(const std::string& name);
 bool heroExistsInDatabase(const std::string& name);
+
+
+
+// Weapon Class
+class Weapon {
+    private:
+        std::string name;
+        int damage;
+        int strengthModifier;
+        int durability;
+
+    public:
+        Weapon(std::string name ="None", int dmg = 0, int strMod = 0, int dur = 0) {
+            this ->name = name;
+            this ->damage = dmg;
+            this ->strengthModifier = strMod;
+            this ->durability = dur;
+        }
+
+        std::string getName() const { return name; }
+        int getDamage() const { return damage; }
+        int getStrengthModifier() const { return strengthModifier; }
+        int getDurability() const { return durability; }
+
+        void reduceDurability(int amount) {
+            if (durability > 0) durability--; // Ensure durability doesn't go below 0
+        }
+
+        // Check if the weapon is broken
+        bool isBroken() const { return durability <= 0; }
+
+        void setName(std::string newName) { name = newName; }
+        void setDamage(int newDamage) { damage = newDamage; }
+        void setStrengthModifier(int newStrengthModifier) { strengthModifier = newStrengthModifier; }
+        void setDurability(int newDurability) { durability = newDurability; }
+};
+
 
 
 

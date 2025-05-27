@@ -41,6 +41,7 @@ int main() {
         if (!heroExistsInDatabase(heroName)) {
             hero = Hero(heroName, 10, 2, 0, 1, 0, 10);
             saveHeroToDatabase(hero);
+            std::cout << "Hero not found in database. A new hero has been created with the name: " << heroName << "\n";
         } else {
             std::cout << "Loading hero...\n";
             hero = loadHeroFromDatabase(heroName);
@@ -48,6 +49,11 @@ int main() {
 
         hero.resetHp();
         std::cout << "Hero loaded!" << "\n";
+        std::cout << "Hero Name: " << hero.getName() << "\n";
+        std::cout << "Hero Level: " << hero.getLevel() << "\n"; 
+        std::cout << "Hero XP: " << hero.getXp() << "\n";
+        std::cout << "Hero Gold: " << hero.getGold() << "\n";
+
     }
 
     std::cout << "Good luck on your adventure " << hero.getName() << "\n";

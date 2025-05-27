@@ -291,11 +291,19 @@ void initDatabase() {
                                   "xp INTEGER, "
                                   "level INTEGER, "
                                   "gold INTEGER, "
-                                  "maxHp INTEGER);";
+                                  "maxHp INTEGER, "
+                                  "weapon_name TEXT DEFAULT 'None', "
+                                  "weapon_damage INTEGER DEFAULT 0, "
+                                  "weapon_modifier INTEGER DEFAULT 0, "
+                                  "weapon_durability INTEGER DEFAULT 0"
+                                  ");";
     
 
     char* errMsg = nullptr;
-    sqlite3_exec(db, createTableSQL, nullptr, nullptr, &errMsg);
+    res = sqlite3_exec(db, createTableSQL, nullptr, nullptr, &errMsg);
+    if (res != SQLITE_OK) {
+        std::cerr << "Error with SQL \n";
+    }
 
     sqlite3_close(db); // Luk databaseforbindelsen
 }
@@ -306,7 +314,10 @@ void saveHeroToDatabase(const Hero& hero) {
 
     // Indsæt eller opdater helten i databasen
     // Hvis helten allerede findes, opdateres den; ellers indsættes den.
-    const char* sql = "INSERT OR REPLACE INTO heroes (name, health, maxHp, strength, xp, level, gold) VALUES (?, ?, ?, ?, ?, ?, ?);";
+    const char* sql = "INSERT OR REPLACE INTO heroes "
+                      "(name, health, maxHp, strength, xp, level, gold, "
+                      "weapon_name, weapon_damage, weapon_modifier, weapon_durability) "
+                      "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);";
     
     sqlite3_stmt* stmt; 
     sqlite3_prepare_v2(db, sql, -1, &stmt, nullptr);
@@ -319,6 +330,13 @@ void saveHeroToDatabase(const Hero& hero) {
     sqlite3_bind_int(stmt, 5, hero.getXp());
     sqlite3_bind_int(stmt, 6, hero.getLevel());
     sqlite3_bind_int(stmt, 7, hero.getGold());
+
+    // Gem våben attributter i databasen.
+    sqlite3_bind_text(stmt, 8, hero.getWeapon().getName().c_str(), -1, SQLITE_STATIC);
+    sqlite3_bind_int(stmt, 9, hero.getWeapon().getDamage());
+    sqlite3_bind_int(stmt, 10, hero.getWeapon().getStrengthModifier());
+    sqlite3_bind_int(stmt, 11, hero.getWeapon().getDurability());
+
 
     sqlite3_step(stmt); // Gem eller opdater helten i databasen
     sqlite3_finalize(stmt); 
@@ -348,8 +366,17 @@ Hero loadHeroFromDatabase(const std::string& name) {
         int gold = sqlite3_column_int(stmt, 5);
         int maxHp = sqlite3_column_int(stmt, 6);
 
-        // Opret en Hero-objekt med de hentede data
+        // Hent våben data fra databasen
+        std::string weaponName = reinterpret_cast<const char*>(sqlite3_column_text(stmt, 7));
+        int weaponDamage = sqlite3_column_int(stmt, 8);
+        int weaponModifier = sqlite3_column_int(stmt, 9);
+        int weaponDurability = sqlite3_column_int(stmt, 10);
+
+
+        // Opret en Hero-objekt og weapon-objekt med de hentede data
+        Weapon weapon(weaponName, weaponDamage, weaponModifier, weaponDurability);
         hero = Hero(heroName, health, strength, xp, level, gold, maxHp);
+        hero.setWeapon(weapon); // Sæt våben for helten
     }
 
     sqlite3_finalize(stmt); 
@@ -360,9 +387,9 @@ Hero loadHeroFromDatabase(const std::string& name) {
 
 
 bool heroExistsInDatabase(const std::string& name) {
-
+    // Åben databaseforbindelsen.
     sqlite3* db;
-    sqlite3_open("heroes.db", &db); // Åben database
+    sqlite3_open("heroes.db", &db); 
 
     const char* sql = "SELECT COUNT(*) FROM heroes WHERE name = ?;";
     sqlite3_stmt* stmt;
