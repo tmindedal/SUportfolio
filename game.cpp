@@ -93,9 +93,11 @@ void combat(Hero &hero, Monster &monster) {
         
         // getWeapon() is a const method so im making a copy and setting it as the new weapon to reduce durability.
         Weapon currentWeapon = hero.getWeapon();
-        currentWeapon.setDurability(currentWeapon.getDurability() - 1); // Reduce weapon durability by 1
-        hero.setWeapon(currentWeapon); // Set the new weapon with reduced durability 
-        std::cout << "Your weapon's durability is now: " << hero.getWeapon().getDurability() << "\n";
+        if (currentWeapon.getDurability() > 0) {
+            currentWeapon.setDurability(currentWeapon.getDurability() - 1); // Reduce weapon durability by 1
+            hero.setWeapon(currentWeapon); // Set the new weapon with reduced durability 
+            std::cout << "Your weapon's durability is now: " << hero.getWeapon().getDurability() << "\n";
+        }
 
         // Register the kill in the database
         registerKillInDatabase(hero.getName(), hero.getWeapon().getName());
@@ -106,9 +108,11 @@ void combat(Hero &hero, Monster &monster) {
         
         // same thing
         Weapon currentWeapon = hero.getWeapon();
-        currentWeapon.setDurability(currentWeapon.getDurability() - 1); // Reduce weapon durability by 1
-        hero.setWeapon(currentWeapon); // Set the new weapon with reduced durability 
-        std::cout << "Your weapon's durability is now: " << hero.getWeapon().getDurability() << "\n";
+        if (currentWeapon.getDurability() > 0) {
+            currentWeapon.setDurability(currentWeapon.getDurability() - 1); // Reduce weapon durability by 1
+            hero.setWeapon(currentWeapon); // Set the new weapon with reduced durability 
+            std::cout << "Your weapon's durability is now: " << hero.getWeapon().getDurability() << "\n";
+        }
     }
 }
 
