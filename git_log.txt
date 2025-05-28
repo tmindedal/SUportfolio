@@ -1,0 +1,38 @@
+fa0bea3 | tmindedal | 2025-05-28 | Final adjustments
+bca02c0 | tmindedal | 2025-05-28 | Fixed bug with weapon durability becoming  negative
+7c254ba | tmindedal | 2025-05-28 | Fixed bug with database (STATIC to TRANSIENT)
+59f2ef6 | tmindedal | 2025-05-28 | Making Ubuntu 22.04 compatible
+88584cd | tmindedal | 2025-05-28 | Tilføjet txt fil til at oprette database.
+d19953c | tmindedal | 2025-05-28 | Fixed main loop to support analysis (all files)
+f43c3b6 | tmindedal | 2025-05-28 | Fixed main loop to support analysis
+e1ea150 | tmindedal | 2025-05-28 | Added analysis
+87f8273 | tmindedal | 2025-05-28 | Succesfully implemented kill count
+5f58c18 | tmindedal | 2025-05-27 | Fixing bugs
+541bf23 | tmindedal | 2025-05-27 | Implemented weapons
+71ecdc1 | tmindedal | 2025-05-27 | Small adjustments
+1e52486 | tmindedal | 2025-05-27 | Small adjustments
+6847e6e | tmindedal | 2025-05-27 | Weapons opdateret
+041f712 | tmindedal | 2025-05-27 | Still trying to fix bugs.
+37bfb0b | tmindedal | 2025-05-27 | Trying to fix bugs.
+30cb79d | tmindedal | 2025-05-27 | Adjustments
+e8fa0a5 | tmindedal | 2025-05-27 | Implemented sqlite3 to the game and CMakeLists.txt
+f2becd9 | tmindedal | 2025-05-27 | Tilføjede funktioner til brug af database
+53bd65d | tmindedal | 2025-05-26 | Fixed bugs and added more caves
+ef4e791 | tmindedal | 2025-05-24 | Added cave class and according game logic
+14194a1 | tmindedal | 2025-05-22 | Fixed bug when chosing to load nonexisting heroes
+ab6ffeb | tmindedal | 2025-05-22 | Updated main() and fixed xp bug
+c1755bc | tmindedal | 2025-05-22 | Update allowing to store/load multiple hereoes
+9e14e4c | tmindedal | 2025-05-22 | Save/load heroes
+e12e7c0 | tmindedal | 2025-04-24 | Added initial heroes
+5a7e200 | tmindedal | 2025-04-24 | Small adjustments
+70e1ae6 | tmindedal | 2025-04-23 | Small adjustments
+7086d3d | tmindedal | 2025-04-23 | Added a main loop and updated some functions
+411fc99 | tmindedal | 2025-04-23 | Added additional functions
+54a9469 | tmindedal | 2025-04-23 | Implementation of Monster class.
+75fb2e4 | tmindedal | 2025-04-23 | Implementation of the Hero class.
+5c632e9 | tmindedal | 2025-04-23 | Updated Character class
+22ca80c | tmindedal | 2025-04-23 | Implementation of the Character class.
+0c04c2e | tmindedal | 2025-04-22 | Hero Class
+329aa89 | tmindedal | 2025-04-22 | Character class
+81c0963 | tmindedal | 2025-04-22 | tryout
+f95cd8f | tmindedal | 2025-04-22 | Initial commit
