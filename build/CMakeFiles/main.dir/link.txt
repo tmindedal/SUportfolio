@@ -1,1 +1,1 @@
-/usr/bin/c++ CMakeFiles/main.dir/gameMain.cpp.o CMakeFiles/main.dir/game.cpp.o CMakeFiles/main.dir/sqlite3.c.o -o main 
+/usr/bin/c++ CMakeFiles/main.dir/gameMain.cpp.o CMakeFiles/main.dir/game.cpp.o -o main  /usr/lib/x86_64-linux-gnu/libsqlite3.so -lpthread -ldl 

@@ -3,10 +3,11 @@ project(SqliteGame)
 
 set(CMAKE_CXX_STANDARD 17)
 
-include_directories(${CMAKE_SOURCE_DIR})  # ← Tilføj denne
+find_package(SQLite3 REQUIRED)
 
 add_executable(main 
     gameMain.cpp 
-    game.cpp 
-    sqlite3.c
+    game.cpp
 )
+
+target_link_libraries(main PRIVATE SQLite::SQLite3 pthread dl)

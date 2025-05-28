@@ -8,7 +8,6 @@ set(CMAKE_DEPENDS_LANGUAGES
 
 # The set of dependency files which are needed:
 set(CMAKE_DEPENDS_DEPENDENCY_FILES
-  "/home/thomasm/SUportfolio/sqlite3.c" "CMakeFiles/main.dir/sqlite3.c.o" "gcc" "CMakeFiles/main.dir/sqlite3.c.o.d"
   "/home/thomasm/SUportfolio/game.cpp" "CMakeFiles/main.dir/game.cpp.o" "gcc" "CMakeFiles/main.dir/game.cpp.o.d"
   "/home/thomasm/SUportfolio/gameMain.cpp" "CMakeFiles/main.dir/gameMain.cpp.o" "gcc" "CMakeFiles/main.dir/gameMain.cpp.o.d"
   )

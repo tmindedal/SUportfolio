@@ -28,7 +28,6 @@ bool Character::isAlive() const { return hp > 0; }
 
 // Implementation of the Hero class
 Hero::Hero(std::string name, int health, int strength, int xp, int level, int gold, int maxHp) : Character(name, health, strength) {
-    this->name = name;
     hp = health;
     this->strength = strength;
     this->level = level;
@@ -52,7 +51,7 @@ void Hero::levelUp() {
         maxHp += 2;
         xp -= level * 1000; // Reset XP after leveling up
         level++;
-        std::cout << name << " leveled up to level " << level << "\n";
+        std::cout << this->name << " leveled up to level " << level << "\n";
         std::cout << "New strength: " << strength << "\n";
         std::cout << "New health: " << maxHp << "\n\n";
     }
@@ -63,7 +62,6 @@ void Hero::resetHp() {
 } 
 
 Monster::Monster(std::string name, int health, int strength, int xpReward) : Character(name, health, strength) {
-    this->name = name;
     this->hp = health;
     this->strength = strength;
     this->xpReward = xpReward;
@@ -357,7 +355,7 @@ void saveHeroToDatabase(const Hero& hero) {
     sqlite3_prepare_v2(db, sql, -1, &stmt, nullptr);
 
     // Gem heltens attributter i databasen.
-    sqlite3_bind_text(stmt, 1, hero.getName().c_str(), -1, SQLITE_STATIC);
+    sqlite3_bind_text(stmt, 1, hero.getName().c_str(), -1, SQLITE_TRANSIENT);
     sqlite3_bind_int(stmt, 2, hero.getHealth());
     sqlite3_bind_int(stmt, 3, hero.getMaxHp());
     sqlite3_bind_int(stmt, 4, hero.getStrength());
@@ -366,7 +364,7 @@ void saveHeroToDatabase(const Hero& hero) {
     sqlite3_bind_int(stmt, 7, hero.getGold());
 
     // Gem våben attributter i databasen.
-    sqlite3_bind_text(stmt, 8, hero.getWeapon().getName().c_str(), -1, SQLITE_STATIC);
+    sqlite3_bind_text(stmt, 8, hero.getWeapon().getName().c_str(), -1, SQLITE_TRANSIENT);
     sqlite3_bind_int(stmt, 9, hero.getWeapon().getDamage());
     sqlite3_bind_int(stmt, 10, hero.getWeapon().getStrengthModifier());
     sqlite3_bind_int(stmt, 11, hero.getWeapon().getDurability());
@@ -385,7 +383,11 @@ Hero loadHeroFromDatabase(const std::string& name) {
     sqlite3* db;
     sqlite3_open("heroes.db", &db); // Åben database
 
-    const char* sqp = "SELECT * FROM heroes WHERE name = ?;";
+   const char* sqp =
+        "SELECT name, health, strength, xp, level, gold, maxHp, "
+        "weapon_name, weapon_damage, weapon_modifier, weapon_durability "
+        "FROM heroes WHERE name = ?;"; 
+
     sqlite3_stmt* stmt;
     sqlite3_prepare_v2(db, sqp, -1, &stmt, nullptr);
     sqlite3_bind_text(stmt, 1, name.c_str(), -1, SQLITE_STATIC);

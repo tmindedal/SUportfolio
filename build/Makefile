@@ -177,30 +177,6 @@ gameMain.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/main.dir/build.make CMakeFiles/main.dir/gameMain.cpp.s
 .PHONY : gameMain.cpp.s
 
-sqlite3.o: sqlite3.c.o
-.PHONY : sqlite3.o
-
-# target to build an object file
-sqlite3.c.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/main.dir/build.make CMakeFiles/main.dir/sqlite3.c.o
-.PHONY : sqlite3.c.o
-
-sqlite3.i: sqlite3.c.i
-.PHONY : sqlite3.i
-
-# target to preprocess a source file
-sqlite3.c.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/main.dir/build.make CMakeFiles/main.dir/sqlite3.c.i
-.PHONY : sqlite3.c.i
-
-sqlite3.s: sqlite3.c.s
-.PHONY : sqlite3.s
-
-# target to generate assembly for a file
-sqlite3.c.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/main.dir/build.make CMakeFiles/main.dir/sqlite3.c.s
-.PHONY : sqlite3.c.s
-
 # Help Target
 help:
 	@echo "The following are some of the valid targets for this Makefile:"
@@ -216,9 +192,6 @@ help:
 	@echo "... gameMain.o"
 	@echo "... gameMain.i"
 	@echo "... gameMain.s"
-	@echo "... sqlite3.o"
-	@echo "... sqlite3.i"
-	@echo "... sqlite3.s"
 .PHONY : help
 
 
